@@ -5,7 +5,108 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>हमारे बारे में | JRC स्कूल, हरही बाज़ार बस्ती</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Horizontal Scroll Styling */
+    .teacher-scroll-container {
+      display: flex;
+      overflow-x: auto;
+      gap: 1.5rem;
+      padding: 1rem 0;
+      scrollbar-width: none; /* Hide default scrollbar for cleaner look */
+      -ms-overflow-style: none;
+      scroll-behavior: smooth;
+    }
+    .teacher-scroll-container::-webkit-scrollbar {
+      display: none; /* Hide default scrollbar for Chrome/Safari */
+    }
+    
+    .scroll-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .scroll-btn {
+      position: absolute;
+      z-index: 10;
+      background: #1e3a8a;
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+      border: none;
+    }
+    .scroll-btn:hover {
+      background: #fbbf24;
+      color: #1e3a8a;
+      transform: scale(1.1);
+    }
+    .btn-left { left: -10px; }
+    .btn-right { right: -10px; }
+
+    .teacher-card {
+      flex: 0 0 220px;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+    .teacher-card:hover {
+      transform: translateY(-5px);
+    }
+    .teacher-img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      border-radius: 1rem;
+      background-color: #e5e7eb;
+      border: 2px solid transparent;
+      transition: border-color 0.3s;
+    }
+    .teacher-card:hover .teacher-img {
+      border-color: #fbbf24;
+    }
+
+    /* Modal Styling */
+    #teacherModal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    .modal-content {
+      background: white;
+      max-width: 500px;
+      width: 100%;
+      border-radius: 1.5rem;
+      padding: 2rem;
+      position: relative;
+      text-align: center;
+      animation: modalSlide 0.4s ease-out;
+    }
+    @keyframes modalSlide {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .fade-in {
+      animation: fadeIn 1s ease-in;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .card-hover:hover {
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+  </style>
 </head>
 <body class="bg-gray-50 text-gray-900">
   <header class="bg-blue-900 text-white">
@@ -18,12 +119,17 @@
         </div>
       </div>
       <nav class="hidden md:flex space-x-6 text-sm font-medium">
-        <a href="school.html" class="hover:text-yellow-300">होम</a>
-        <a href="about.html" class="text-yellow-300 font-semibold">हमारे बारे में</a>
+         <a href="school.html" class="hover:text-yellow-300">होम</a>
+        <a href="about.html" class="hover:text-yellow-300">हमारे बारे में</a>
         <a href="admissions.html" class="hover:text-yellow-300">प्रवेश</a>
         <a href="fees.html" class="hover:text-yellow-300">फीस संरचना</a>
+        <a href="#facilities" class="hover:text-yellow-300">सुविधाएं</a>
+        <a href="#news" class="hover:text-yellow-300">सूचनाएं</a>
+        <a href="#gallery" class="hover:text-yellow-300">गैलरी</a>
+        <a href="#contact" class="hover:text-yellow-300">संपर्क</a>
         <a href="student-login.html" class="hover:text-yellow-300">छात्र पोर्टल</a>
         <a href="ai-assistant.html" class="bg-yellow-400 text-blue-900 px-3 py-1 rounded-full hover:bg-yellow-300 transition">AI सहायक</a>
+        <a href="teacher-login.html" class="text-gray-300 hover:text-yellow-300 border border-gray-600 px-3 py-1 rounded-full transition">👩‍🏫 Teacher</a>
         <a href="admin-login.html" class="text-gray-300 hover:text-yellow-300 border border-gray-600 px-3 py-1 rounded-full transition">🔐 Admin</a>
       </nav>
     </div>
@@ -31,76 +137,176 @@
 
   <main class="max-w-6xl mx-auto px-4 py-12 space-y-16">
     <section class="fade-in">
-      <h1 class="text-4xl font-extrabold text-blue-800 mb-4 fade-in">J.R.C. इंटर कॉलेज के बारे में</h1>
+      <h1 class="text-4xl font-extrabold text-blue-800 mb-4">J.R.C. इंटर कॉलेज के बारे में</h1>
       <p class="text-lg leading-relaxed mb-4">
         J.R.C. इंटर कॉलेज, हरही बाज़ार बस्ती, मूल्यों, अनुशासन और आधुनिक शिक्षण प्रथाओं में निहित गुणवत्तापूर्ण शिक्षा प्रदान करने के लिए प्रतिबद्ध है। हम मानते हैं कि प्रत्येक बच्चा अद्वितीय है और एक ऐसे वातावरण का हकदार है
         जो उन्हें अपनी सच्ची क्षमता खोजने में मदद करता है।
       </p>
       <p class="text-lg leading-relaxed">
-        हमारा परिसर एक सुरक्षित और पोषण करने वाला स्थान प्रदान करता है जहां छात्रों को शिक्षा, खेल,
-        सह-पाठ्यचर्या गतिविधियों और नेतृत्व में उत्कृष्टता के लिए प्रोत्साहित किया जाता है। पारंपरिक शिक्षण और प्रौद्योगिकी-सक्षम शिक्षा के मिश्रण के साथ,
+        हमारा परिसर एक सुरक्षित and पोषण करने वाला स्थान प्रदान करता है जहां छात्रों को शिक्षा, खेल,
+        सह-पाठ्यचर्या गतिविधियों और नेतृत्व में उत्कृष्टता के लिए प्रोत्साहित किया जाता है। पारंपरिक शिक्षण and प्रौद्योगिकी-सक्षम शिक्षा के मिश्रण के साथ,
         हम अपने छात्रों को आत्मविश्वास के साथ भविष्य की चुनौतियों का सामना करने के लिए तैयार करते हैं।
       </p>
     </section>
 
+    <!-- Mission & Vision Section -->
     <section class="grid md:grid-cols-2 gap-10 items-start fade-in">
       <div>
-        <h2 class="text-2xl font-bold text-blue-700 mb-3 fade-in">हमारी दृष्टि</h2>
+        <h2 class="text-2xl font-bold text-blue-700 mb-3">हमारी दृष्टि</h2>
         <p class="text-base leading-relaxed mb-2">
-          जिम्मेदार, आत्मविश्वासी और दयालु व्यक्तियों को पोषित करना जो समाज और
+          जिम्मेदार, आत्मविश्वासी and दयालु व्यक्तियों को पोषित करना जो समाज and
           राष्ट्र में सकारात्मक योगदान देते हैं।
         </p>
         <h2 class="text-2xl font-bold text-blue-700 mb-3 mt-6">हमारा मिशन</h2>
         <ul class="list-disc list-inside space-y-2 text-base">
-          <li>सर्वांगीण शिक्षा प्रदान करना जो शिक्षा, मूल्यों और जीवन कौशल को संतुलित करती है।</li>
-          <li>जिज्ञासा, रचनात्मकता और आलोचनात्मक सोच की संस्कृति को बढ़ावा देना।</li>
-          <li>शारीरिक फिटनेस, खेल भावना और टीम वर्क को बढ़ावा देना।</li>
-          <li>नैतिक मूल्यों, संस्कृति के प्रति सम्मान और सामाजिक जिम्मेदारी को बढ़ावा देना।</li>
+          <li>सर्वांगीण शिक्षा प्रदान करना जो शिक्षा, मूल्यों and जीवन कौशल को संतुलित करती है।</li>
+          <li>जिज्ञासा, रचनात्मकता and आलोचनात्मक सोच की संस्कृति को बढ़ावा देना।</li>
+          <li>शारीरिक फिटनेस, खेल भावना and टीम वर्क को बढ़ावा देना।</li>
+          <li>नैतिक मूल्यों, संस्कृति के प्रति सम्मान and सामाजिक जिम्मेदारी को बढ़ावा देना।</li>
         </ul>
       </div>
       <div class="bg-white rounded-2xl shadow-lg p-6 card-hover">
-        <h2 class="text-2xl font-bold text-blue-700 mb-3 fade-in">प्रधानाचार्य का संदेश</h2>
+        <h2 class="text-2xl font-bold text-blue-700 mb-3">प्रधानाचार्य का संदेश</h2>
         <p class="italic mb-3">
-          "शिक्षा केवल अंक प्राप्त करने के बारे में नहीं है; यह चरित्र, आत्मविश्वास और जीवन के लिए एक मजबूत
+          "शिक्षा केवल अंक प्राप्त करने के बारे में नहीं है; यह चरित्र, आत्मविश्वास and जीवन के लिए एक मजबूत
           नींव बनाने के बारे में है।"
         </p>
         <p class="text-base leading-relaxed mb-4">
-          J.R.C. इंटर कॉलेज में, हम एक ऐसा वातावरण बनाने का प्रयास करते हैं जहां छात्र हर दिन सीखने और बढ़ने के लिए प्रेरित महसूस करते हैं। हमारे समर्पित शिक्षक सदस्य यह सुनिश्चित करने के लिए अथक परिश्रम करते हैं कि प्रत्येक बच्चे को व्यक्तिगत ध्यान
-          और मार्गदर्शन मिले।
+          J.R.C. इंटर कॉलेज में, हम एक ऐसा वातावरण बनाने का प्रयास करते हैं जहां छात्र हर दिन सीखने and बढ़ने के लिए प्रेरित महसूस करते हैं। हमारे समर्पित शिक्षक सदस्य यह सुनिश्चित करने के लिए अथक परिश्रम करते हैं कि प्रत्येक बच्चे को व्यक्तिगत ध्यान
+          and मार्गदर्शन मिले।
         </p>
         <p class="font-semibold text-blue-800">- प्रधानाचार्य, J.R.C. इंटर कॉलेज</p>
       </div>
     </section>
 
+    <!-- Faculty Section with Horizontal Scroll and Arrows -->
     <section id="faculty" class="fade-in">
-      <h2 class="text-3xl font-bold text-blue-800 mb-6 fade-in">हमारे शिक्षक</h2>
-      <p class="mb-4 text-base fade-in">
-        हमारे शिक्षक अनुभवी, देखभाल करने वाले और अपने संबंधित विषयों में अत्यधिक योग्य हैं। वे नियमित रूप से प्रशिक्षण लेते हैं
-        आधुनिक शिक्षण पद्धतियों और प्रौद्योगिकी के साथ अद्यतन रहने के लिए।
+      <h2 class="text-3xl font-bold text-blue-800 mb-6">हमारे शिक्षक</h2>
+      <p class="mb-4 text-base">
+        हमारे शिक्षक अनुभवी, देखभाल करने वाले and अपने संबंधित विषयों में अत्यधिक योग्य हैं। फोटो पर क्लिक करें जानकारी के लिए।
       </p>
-      <div class="grid md:grid-cols-3 gap-6">
-        <div class="facility-card bg-white rounded-2xl shadow-md p-4 text-center card-hover">
-          <p class="font-semibold text-blue-700">वरिष्ठ अनुभाग के शिक्षक</p>
-          <p class="text-sm mt-2">गणित, विज्ञान, वाणिज्य और मानविकी धाराओं में विशेषज्ञ।</p>
+      
+      <div class="scroll-wrapper">
+        <!-- Left Arrow -->
+        <button class="scroll-btn btn-left" onclick="scrollTeachers('left')">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+
+        <!-- Container -->
+        <div class="teacher-scroll-container" id="teacherContainer">
+          <!-- JS generates teacher cards from teachersData array here -->
         </div>
-        <div class="facility-card bg-white rounded-2xl shadow-md p-4 text-center card-hover">
-          <p class="font-semibold text-blue-700">मध्य अनुभाग के शिक्षक</p>
-          <p class="text-sm mt-2">मजबूत अवधारणात्मक समझ और कौशल निर्माण पर ध्यान केंद्रित।</p>
-        </div>
-        <div class="facility-card bg-white rounded-2xl shadow-md p-4 text-center card-hover">
-          <p class="font-semibold text-blue-700">प्राथमिक अनुभाग के शिक्षक</p>
-          <p class="text-sm mt-2">छोटे बच्चों के लिए एक आनंददायक और आकर्षक शिक्षण वातावरण बनाना।</p>
-        </div>
+
+        <!-- Right Arrow -->
+        <button class="scroll-btn btn-right" onclick="scrollTeachers('right')">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
       </div>
     </section>
   </main>
+
+  <!-- Teacher Detail Modal -->
+  <div id="teacherModal">
+    <div class="modal-content">
+      <button onclick="closeModal()" class="absolute top-4 right-4 text-2xl font-bold text-gray-400 hover:text-red-500 transition-colors">&times;</button>
+      <div id="modalData">
+        <img id="modalImg" src="" alt="Teacher" class="w-32 h-32 rounded-full mx-auto mb-4 object-cover border-4 border-blue-100 shadow-md">
+        <h3 id="modalName" class="text-2xl font-bold text-blue-900 mb-2"></h3>
+        <div class="text-left space-y-3 text-gray-700 bg-blue-50 p-4 rounded-xl">
+          <p class="flex justify-between border-b border-blue-100 pb-1"><strong>योग्यता:</strong> <span id="modalQual" class="text-blue-800"></span></p>
+          <p class="flex justify-between border-b border-blue-100 pb-1"><strong>अनुभव:</strong> <span id="modalExp" class="text-blue-800"></span></p>
+          <p class="flex justify-between border-b border-blue-100 pb-1"><strong>विषय:</strong> <span id="modalSub" class="text-blue-800"></span></p>
+          <div class="mt-4">
+            <p class="text-xs font-bold uppercase text-blue-400 mb-1">विचार (Thought):</p>
+            <p class="italic text-blue-600 font-medium">" <span id="modalThought"></span> "</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <footer class="bg-gray-900 text-center text-white py-6 mt-10">
     <p>© 2025 JRC स्कूल, हरही बाज़ार बस्ती | शिवमणि सिंह द्वारा डिज़ाइन किया गया</p>
   </footer>
 
-  <!-- JavaScript Files -->
-  <script src="js/main.js"></script>
+  <script>
+    // Separate Data for each teacher
+    const teachersData = [
+      { id: 1, name: "Mr.Dinesh singh(principal sir)", qual: "M.Sc, B.Ed", exp: "12 साल", sub: "English", thought: "गणित जीवन के रहस्यों को सुलझाने की कुंजी है।", img: "https://via.placeholder.com/220x220?text=Teacher+1" },
+      { id: 2, name: "Mr. Baaban Sir", qual: "Ph.D, Hindi", exp: "15 साल", sub: "Hindi", thought: "साहित्य समाज का दर्पण होता है।", img: "https://via.placeholder.com/220x220?text=Teacher+2" },
+      { id: 3, name: "Shivmani singh", qual: "B.C.A.", exp: "1 साल", sub: "Maths & Computer", thought: "अतीत को जानकर ही हम बेहतर भविष्य बना सकते हैं।", img: "mee.jpg" },
+      { id: 4, name: "Mr.Rammurat sharma", qual: "M.Sc, Physics", exp: "10 साल", sub: "भौतिक विज्ञान", thought: "विज्ञान जिज्ञासा का दूसरा नाम है।", img: "https://via.placeholder.com/220x220?text=Teacher+4" },
+      { id: 5, name: "श्री पंकज मिश्रा", qual: "B.Tech, B.Ed", exp: "5 साल", sub: "कंप्यूटर", thought: "तकनीक आज की दुनिया की भाषा है।", img: "https://via.placeholder.com/220x220?text=Teacher+5" },
+      { id: 6, name: "कुमारी नेहा", qual: "M.A, English", exp: "6 साल", sub: "अंग्रेजी", thought: "Language is the roadmap of a culture.", img: "https://via.placeholder.com/220x220?text=Teacher+6" },
+      { id: 7, name: "श्री सुमित वर्मा", qual: "M.Com, B.Ed", exp: "11 साल", sub: "वाणिज्य", thought: "अनुशासन ही सफलता का आधार है।", img: "https://via.placeholder.com/220x220?text=Teacher+7" },
+      { id: 8, name: "डॉ. आर. के. गुप्ता", qual: "M.Sc, Chemistry", exp: "20 साल", sub: "रसायन विज्ञान", thought: "सीखना कभी बंद नहीं होता।", img: "https://via.placeholder.com/220x220?text=Teacher+8" },
+      { id: 9, name: "श्री अनिल पाठक", qual: "B.P.Ed", exp: "14 साल", sub: "खेल-कूद", thought: "स्वस्थ शरीर में ही स्वस्थ मस्तिष्क बसता है।", img: "https://via.placeholder.com/220x220?text=Teacher+9" },
+      { id: 10, name: "श्रीमती आभा पांडे", qual: "M.A, Music", exp: "9 साल", sub: "संगीत", thought: "संगीत आत्मा की आवाज़ है।", img: "https://via.placeholder.com/220x220?text=Teacher+10" },
+      { id: 11, name: "श्री विकास सिंह", qual: "M.Sc, Biology", exp: "7 साल", sub: "जीव विज्ञान", thought: "प्रकृति ही सबसे बड़ी गुरु है।", img: "https://via.placeholder.com/220x220?text=Teacher+11" },
+      { id: 12, name: "श्री राकेश तिवारी", qual: "M.A, Sanskrit", exp: "18 साल", sub: "संस्कृत", thought: "ज्ञानम् परमं बलम्।", img: "https://via.placeholder.com/220x220?text=Teacher+12" },
+      { id: 13, name: "कुमारी अंजलि", qual: "M.A, Geography", exp: "4 साल", sub: "भूगोल", thought: "धरती को समझना खुद को समझना है।", img: "https://via.placeholder.com/220x220?text=Teacher+13" },
+      { id: 14, name: "श्री गौरव मौर्य", qual: "M.Sc, Maths", exp: "8 साल", sub: "गणित", thought: "अभ्यास ही पूर्णता लाता है।", img: "https://via.placeholder.com/220x220?text=Teacher+14" },
+      { id: 15, name: "श्रीमती कंचन", qual: "B.Ed, Primary Specialist", exp: "12 साल", sub: "प्राथमिक शिक्षा", thought: "बच्चे कल का भविष्य हैं।", img: "https://via.placeholder.com/220x220?text=Teacher+15" },
+      { id: 16, name: "श्री विनय श्रीवास्तव", qual: "M.A, Civics", exp: "10 साल", sub: "नागरिक शास्त्र", thought: "जागरूक नागरिक ही देश की शक्ति है।", img: "https://via.placeholder.com/220x220?text=Teacher+16" }
+    ];
+
+    // Generating teacher cards from the array
+    const teacherContainer = document.getElementById('teacherContainer');
+    teachersData.forEach(teacher => {
+      const card = document.createElement('div');
+      card.className = 'teacher-card bg-white p-2 rounded-2xl shadow-sm hover:shadow-lg transition-shadow';
+      card.onclick = () => showTeacherDetails(teacher.id);
+      card.innerHTML = `
+        <img src="${teacher.img}" alt="${teacher.name}" class="teacher-img">
+        <div class="text-center mt-3">
+          <p class="font-bold text-blue-900 text-sm">${teacher.name}</p>
+          <p class="text-xs text-blue-600 font-medium mb-1">${teacher.sub} Faculty</p>
+          <p class="text-[10px] text-gray-400 italic">जानकारी देखें</p>
+        </div>
+      `;
+      teacherContainer.appendChild(card);
+    });
+
+    // Scroll Logic for Arrows
+    function scrollTeachers(direction) {
+      const container = document.getElementById('teacherContainer');
+      const scrollAmount = 350;
+      if (direction === 'left') {
+        container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+      } else {
+        container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+      }
+    }
+
+    function showTeacherDetails(id) {
+      const modal = document.getElementById('teacherModal');
+      const teacher = teachersData.find(t => t.id === id);
+      
+      if(teacher) {
+        document.getElementById('modalName').innerText = teacher.name;
+        document.getElementById('modalImg').src = teacher.img;
+        document.getElementById('modalQual').innerText = teacher.qual;
+        document.getElementById('modalExp').innerText = teacher.exp;
+        document.getElementById('modalSub').innerText = teacher.sub;
+        document.getElementById('modalThought').innerText = teacher.thought;
+        modal.style.display = 'flex';
+      }
+    }
+
+    function closeModal() {
+      document.getElementById('teacherModal').style.display = 'none';
+    }
+
+    window.onclick = function(event) {
+      const modal = document.getElementById('teacherModal');
+      if (event.target == modal) {
+        closeModal();
+      }
+    }
+  </script>
 </body>
 </html>
-
